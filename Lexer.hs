@@ -71,6 +71,7 @@ lexer ('&':'&':cs) = TokenAnd : lexer cs
 lexer ('|':'|':cs) = TokenOr : lexer cs 
 lexer (':':cs) = TokenColon : lexer cs
 lexer ('-':'>':cs) = TokenArrow : lexer cs
+lexer (';':cs) = TokenSemicolon : lexer cs
 lexer ('=':cs) = TokenEq : lexer cs
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs)
