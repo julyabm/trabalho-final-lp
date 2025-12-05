@@ -1,0 +1,23 @@
+name: trabalho-final-lp
+version: 1.0
+author: Gabriel Pietro de Souza; Julya Brustolin Marssona
+library:
+  source-dirs: src
+  exposed-modules:
+    - Lexer
+    - Parser
+    - TypeChecker
+    - Interpreter
+  build-tools:
+    - happy
+
+executables:
+  trabalho-lp-exe:
+    main: Main.hs
+    source-dirs: src
+    dependencies:
+      - trabalho-final-lp
+
+dependencies:
+  - base >= 4.7 && < 5
+  - array
