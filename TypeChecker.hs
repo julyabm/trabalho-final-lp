@@ -46,6 +46,26 @@ typeof ctx (App e1 e2) = case typeof ctx e1 of
                            _ -> Nothing 
 
 
+-- T-NIL
+typeof ctx (Nil t) = Just (TList t)
+-- T-CONS
+typeof ctx (ListCons t e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
+                             (Just t1, Just (TList t2)) | t1 == t2 -> Just (TList t1)
+                             _ -> Nothing
+-- T-ISNIL
+typeof ctx (IsNil _ e) = case typeof ctx e of
+                          Just (TList _) -> Just TBool
+                          _ -> Nothing
+-- T-HEAD
+typeof ctx (Head _ e) = case typeof ctx e of
+                         Just (TList t) -> Just t
+                         _ -> Nothing
+-- T-TAIL
+typeof ctx (Tail _ e) = case typeof ctx e of
+                         Just (TList t) -> Just (TList t)
+                         _ -> Nothing
+
+
 typecheck :: Expr -> Expr 
 typecheck e = case typeof [] e of 
                 Just _ -> e 

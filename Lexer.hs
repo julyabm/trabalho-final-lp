@@ -16,6 +16,18 @@ data Token = TokenNum Int
            | TokenLam
            | TokenEq
            | TokenVar String
+
+           | TokenNil
+           | TokenListCons
+           | TokenIsNil
+           | TokenHead
+           | TokenTail
+           | TokenLSquare
+           | TokenRSquare
+
+           | TokenKWNum
+           | TokenKWBool
+
            deriving Show 
 
 data Expr = Num Int 
@@ -30,11 +42,19 @@ data Expr = Num Int
           | Var String
           | Lam String Ty Expr 
           | App Expr Expr 
+
+          | Nil Ty           
+          | ListCons Ty Expr Expr
+          | IsNil Ty Expr
+          | Head Ty Expr
+          | Tail Ty Expr
+
           deriving Show 
 
 data Ty = TNum 
         | TBool 
         | TFun Ty Ty 
+        | TList Ty
         deriving (Show, Eq) 
 
 lexer :: String -> [Token]
@@ -46,6 +66,10 @@ lexer (')':cs) = TokenRParen : lexer cs
 lexer ('&':'&':cs) = TokenAnd : lexer cs 
 lexer ('|':'|':cs) = TokenOr : lexer cs  
 lexer ('=':cs) = TokenEq : lexer cs
+
+lexer ('[':cs) = TokenLSquare : lexer cs 
+lexer (']':cs) = TokenRSquare : lexer cs
+
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs)
              | isAlpha c = lexKw (c:cs)
@@ -61,4 +85,14 @@ lexKw cs = case span isAlpha cs of
             
              ("lam", rest) -> TokenLam : lexer rest
              ("=", rest) -> TokenEq : lexer rest
+
+             ("nil", rest) -> TokenNil : lexer rest
+             ("listcons", rest) -> TokenListCons : lexer rest
+             ("isnil", rest) -> TokenIsNil : lexer rest
+             ("head", rest) -> TokenHead : lexer rest
+             ("tail", rest) -> TokenTail : lexer rest
+
+             ("numeric", rest) -> TokenKWNum : lexer rest
+             ("bool", rest) -> TokenKWBool : lexer rest
+
              (var, rest) -> TokenVar var: lexer rest
