@@ -27,6 +27,7 @@ data Token = TokenNum Int
 
            | TokenKWNum
            | TokenKWBool
+           | TokenArrow
 
            deriving Show 
 
@@ -67,6 +68,8 @@ lexer ('&':'&':cs) = TokenAnd : lexer cs
 lexer ('|':'|':cs) = TokenOr : lexer cs  
 lexer ('=':cs) = TokenEq : lexer cs
 
+
+lexer ('-':'>':cs) = TokenArrow : lexer cs
 lexer ('[':cs) = TokenLSquare : lexer cs 
 lexer (']':cs) = TokenRSquare : lexer cs
 

@@ -8,8 +8,6 @@ import Lexer
 %tokentype { Token }
 %error { parseError }
 
-%right lam_prec
-
 %left "||"
 %left "&&"
 %left '+'
@@ -30,6 +28,8 @@ import Lexer
     var             { TokenVar $$}
     '='             { TokenEq } 
     
+    'lam'           { TokenLam }
+    '->'            { TokenArrow }
     'nil'           { TokenNil }
     'listcons'      { TokenListCons }
     'isnil'         { TokenIsNil }
@@ -51,8 +51,9 @@ Exp     : num                                 { Num $1 }
         | Exp "||" Exp                        { Or $1 $3 }
         | '(' Exp ')'                         { Paren $2 }
         | 'if' Exp Exp Exp                    { If $2 $3 $4 } 
-        | var                                 { Var $1 }      
+        | var                                 { Var $1 }    
         | Exp Exp %prec app                   { App $1 $2 }
+        | 'lam' var Ty '->' Exp               { Lam $2 $3 $5 }  
 
         | 'nil'      '[' Ty ']'               { Nil $3 }
         | 'listcons' '[' Ty ']' Exp Exp       { ListCons $3 $5 $6 }

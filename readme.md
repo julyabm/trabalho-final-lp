@@ -49,6 +49,10 @@ stack init
     ```txt
     if (true && (isnil [numeric] (nil [numeric]))) true false
     ```
+- Utilização de lambda
+    ```txt
+   (lam x numeric -> x + 1) 5
+    ```
 - Verificação de uma lista vazia
     ```txt
     isnil [numeric] (nil [numeric])

@@ -71,12 +71,15 @@ step (If BFalse e1 e2) = e2
 step (If e e1 e2) = If (step e) e1 e2
 --
 
+step (App e1 e2) | not (isValue e1) = App (step e1) e2
+
 step (App (Lam x tp e1) e2) = if (isValue e2) then 
                                 subst x e2 e1 
                               else 
                                 App (Lam x tp e1) (step e2)
 
-step (Paren e) = e
+step (Paren e) | isValue e = e
+step (Paren e) = Paren (step e)
 
 step (ListCons t e1 e2) | not (isValue e1) = ListCons t (step e1) e2               --E-CONS1           
 step (ListCons t v1 e2) | isValue v1 && not (isValue e2) = ListCons t v1 (step e2) --E-CONS2  
